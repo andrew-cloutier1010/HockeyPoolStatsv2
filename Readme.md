@@ -1,9 +1,13 @@
-************************************************************************
-*	  HockeyPoolStatsv2											       *
-*	  by:  Andrew Cloutier										       *
-*	  GitHub: https://github.com/andrew-cloutier1010/HockeyPoolStatsv2 *
-*																	   *
-************************************************************************
+
+
+
+
+#########################################################################
+#	  HockeyPoolStatsv2											        #
+#	  by:  Andrew Cloutier										        #
+#	  GitHub: https://github.com/andrew-cloutier1010/HockeyPoolStatsv2  #
+#																	    #
+#########################################################################
 
 How to use this program:
 1. Use the Initial Setup buttons to generate NHL team data.
