@@ -1,11 +1,13 @@
-*******************************************************************
-*	  HockeyPoolStatsv2											  *
-*	  by:  Andrew Cloutier										  *
-*	  GitHub: https://github.com/andrewcloutier/HockeyPoolStatsv2 *
-*******************************************************************
+************************************************************************
+*	  HockeyPoolStatsv2											       *
+*	  by:  Andrew Cloutier										       *
+*	  GitHub: https://github.com/andrew-cloutier1010/HockeyPoolStatsv2 *
+*																	   *
+************************************************************************
 
 How to use this program:
-1. Use the Initial Setup buttons to generate NHL team data.	
+1. Use the Initial Setup buttons to generate NHL team data.
+	
 		a. Click "Generate Teams" to create a list of NHL teams.
 
 2. Yearly setup is used to setup yearly playoff data.
