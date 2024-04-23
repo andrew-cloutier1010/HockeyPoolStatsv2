@@ -4,13 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static HockeyPoolStatsv2.apiGoalie;
+using static HockeyPoolStatsv2.ApiModels.apiGoalieSeason;
+using static HockeyPoolStatsv2.ApiModels.apiPlayerSeason;
 using static HockeyPoolStatsv2.apiPlayers;
 using static HockeyPoolStatsv2.apiTeamRosterIDs;
 using static HockeyPoolStatsv2.apiTeams;
@@ -149,6 +153,7 @@ namespace HockeyPoolStatsv2
                         roster.Shutouts = 0;
                         roster.Wins = 0;
                         roster.Points = 0;
+                        roster.Enabled = true;
                         teamRosters.Add(roster);
 
                     }
@@ -166,6 +171,7 @@ namespace HockeyPoolStatsv2
                         roster.Shutouts = 0;
                         roster.Wins = 0;
                         roster.Points = 0;
+                        roster.Enabled = true;
                         teamRosters.Add(roster);
                     }
                     foreach (var item in myDeserializedClass.goalies)
@@ -182,6 +188,7 @@ namespace HockeyPoolStatsv2
                         roster.Shutouts = 0;
                         roster.Wins = 0;
                         roster.Points = 0;
+                        roster.Enabled = true;
                         teamRosters.Add(roster);
                     }
 
@@ -215,9 +222,20 @@ namespace HockeyPoolStatsv2
             string json = System.IO.File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
             // make a list of teamrosters
             List<TeamRosters> teamRosters = JsonConvert.DeserializeObject<List<TeamRosters>>(json);
+            int count = 0;
+            Stopwatch watch = new Stopwatch();
             foreach (var item in teamRosters)
             {
-                // I need to hit the player API to get the points for that player for this playoff season...............
+                watch.Start();
+                count++;
+                lbl_status.Text = "Progress: " + count.ToString() + "/" + teamRosters.Count.ToString();
+
+
+                // Player has been disabled. Skipping them.
+                if (!item.Enabled) { continue;  }
+
+
+                // I need to hit the player API to get the points for that player for this playoff season...
                 // Perform your logic here for playoff teams
                 ApiCall apiCall = new ApiCall();
                 string responseBody = await apiCall.ReturnApiJsonAsync("v1/player/" + item.PlayerID + "/landing");
@@ -301,7 +319,11 @@ namespace HockeyPoolStatsv2
             }
             System.IO.File.WriteAllText(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath), csv.ToString());
 
-            lbl_status.Text = "Gathering player stats complete.";
+            watch.Stop();
+            double minutes = TimeSpan.FromMilliseconds(watch.ElapsedMilliseconds).TotalMinutes;
+            minutes = Math.Round(minutes, 0, MidpointRounding.AwayFromZero);
+            lbl_status.Text = "Gathering player stats complete. The process took: " + minutes.ToString() + " minutes.";
+
             LoadStatus();
         }
 
@@ -462,6 +484,114 @@ namespace HockeyPoolStatsv2
         {
             // I need to open the stats folder in explorer
             System.Diagnostics.Process.Start("explorer.exe", String.Format(@"{0}\Stats", Application.StartupPath));
+        }
+
+        private async void button6_Click(object sender, EventArgs e)
+        {
+
+            string json = System.IO.File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
+            // make a list of teamrosters
+
+            List<TeamRosters> teamRosters = JsonConvert.DeserializeObject<List<TeamRosters>>(json);
+            int count = 0;
+            Stopwatch watch = new Stopwatch();
+
+            lbl_status.Visible = true;
+            foreach (var item in teamRosters)
+            {
+
+                count++;
+                watch.Start();
+                lbl_status.Text = count.ToString() + "/" + teamRosters.Count.ToString();
+
+                ApiCall call = new ApiCall();
+                string uri = string.Format("v1/player/{0}/game-log/{1}/3", item.PlayerID, set.PlayoffYear);
+                var responseBody = await call.ReturnApiJsonAsync(uri);
+
+                if (responseBody != null)
+                {
+
+
+                    if (item.Position == "Goalie")
+                    {
+
+                        int wins = 0;
+                        int shutouts = 0;
+                        if (!responseBody.Contains("GameLog")) { continue; }
+                        Root6 myDeserializedClass = JsonConvert.DeserializeObject<Root6>(responseBody);
+                        foreach (var game in myDeserializedClass.gameLog)
+                        {
+                            if (game.decision != "L")
+                            {
+                                wins++;
+                            }
+                            shutouts = game.shutouts;
+
+                        }
+
+                        item.Shutouts = shutouts;
+                        item.Wins = wins;
+
+                    }
+                    else
+                    {
+                        int goals = 0;
+                        int assits = 0;
+                        int points = 0;
+
+                        if (!responseBody.Contains("GameLog")) { continue; }
+                        Root5 myDeserializedClass = JsonConvert.DeserializeObject<Root5>(responseBody);
+                        foreach (var game in myDeserializedClass.gameLog)
+                        {
+
+                            goals += game.goals;
+                            assits += game.assists;
+                            points += game.points;
+                        }
+
+                        item.Goals = goals;
+                        item.Assists = assits;
+                        item.Points = points;
+
+                    }
+
+                }
+            }
+
+
+            // Serialize the list of TeamRosters objects to JSON
+            string jsonTeamRosters = JsonConvert.SerializeObject(teamRosters);
+            // save the file
+            System.IO.File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), jsonTeamRosters);
+
+            // Save the list of TeamRosters objects to a CSV file
+            StringBuilder csv = new StringBuilder();
+            csv.AppendLine("TeamAbbrev,PlayerID,TeamName,FullName,Goals,Assists,Points,Shutouts,Wins,Position");
+            foreach (var item in teamRosters)
+            {
+                csv.AppendLine(item.TeamAbbrev + "," + item.PlayerID + "," + item.TeamName + "," + item.FullName + "," + item.Goals + "," + item.Assists + "," + item.Points + "," + item.Shutouts + "," + item.Wins + "," + item.Position);
+            }
+
+            // save the file
+            if (System.IO.File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
+            {
+                System.IO.File.Delete(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath));
+            }
+            System.IO.File.WriteAllText(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath), csv.ToString());
+
+            lbl_status.Text = "Gathering player stats complete.";
+            LoadStatus();
+
+            watch.Stop();
+            lbl_status.Text = watch.ElapsedMilliseconds.ToString();
+
+
+        }
+
+        private void disablePlayersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DisablePlayersForm dplayers = new DisablePlayersForm();
+            dplayers.ShowDialog();
         }
     }
 }

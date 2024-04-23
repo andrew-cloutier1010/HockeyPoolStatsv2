@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,6 +21,7 @@ namespace HockeyPoolStatsv2
         public int Shutouts { get; set; }
         public int Wins { get; set; }
         public string Position { get; set; }
+        public bool Enabled { get; set; }
 
     }
 }
