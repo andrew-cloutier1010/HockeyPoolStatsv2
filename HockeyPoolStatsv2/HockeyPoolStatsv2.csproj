@@ -50,9 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiModels\apiGoalie.cs" />
+    <Compile Include="ApiModels\apiGoalieSeason.cs" />
     <Compile Include="ApiModels\apiPlayers.cs" />
+    <Compile Include="ApiModels\apiPlayerSeason.cs" />
     <Compile Include="ApiModels\apiTeamRosterIDs.cs" />
     <Compile Include="ApiModels\apiTeams.cs" />
+    <Compile Include="DisablePlayersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisablePlayersForm.Designer.cs">
+      <DependentUpon>DisablePlayersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +91,9 @@
     </Compile>
     <Compile Include="Models\TeamRosters.cs" />
     <Compile Include="Models\Teams.cs" />
+    <EmbeddedResource Include="DisablePlayersForm.resx">
+      <DependentUpon>DisablePlayersForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
