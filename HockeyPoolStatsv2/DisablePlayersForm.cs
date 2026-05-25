@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using HockeyPoolStatsv2.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HockeyPoolStatsv2
 {
@@ -121,13 +123,13 @@ namespace HockeyPoolStatsv2
                 if (player.Enabled)
                 {
                     player.Enabled = false;
-                    row.DefaultCellStyle.BackColor = Color.Red;
+                 //  row.DefaultCellStyle.BackColor = Color.Red;
                 }
                 else
                 {
                     player.Enabled = true;
                     Status = true;
-                    row.DefaultCellStyle.BackColor = Color.Green;
+                   // row.DefaultCellStyle.BackColor = Color.Green;
                 }
 
 
@@ -150,7 +152,45 @@ namespace HockeyPoolStatsv2
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Enable all players
+            var players = (List<TeamRosters>)playersGrid.DataSource;
+
+            foreach (var player in players)
+            {
+                player.Enabled = true;
+            }
+
+            playersGrid.Refresh();
+
+            // Now I need th save the list as json
+            string newJson = JsonConvert.SerializeObject(players);
+            System.IO.File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), newJson);
 
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Disable all players
+
+            // Enable all players
+            var players = (List<TeamRosters>)playersGrid.DataSource;
+
+            foreach (var player in players)
+            {
+                player.Enabled = false;
+            }
+
+            playersGrid.Refresh();
+
+            // Now I need th save the list as json
+            string newJson = JsonConvert.SerializeObject(players);
+            System.IO.File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), newJson);
+
+
+
+        }
     }
 }

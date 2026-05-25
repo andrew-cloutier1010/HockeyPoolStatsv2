@@ -1,4 +1,5 @@
 ﻿using HockeyPoolStatsv2.Helpers;
+using HockeyPoolStatsv2.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
@@ -54,7 +56,7 @@ namespace HockeyPoolStatsv2
             lbl_status.Text = "Generating Teams...Please wait.";
 
 
-            if (System.IO.File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
+            if (File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
             {
                 // Need to ask the user if they want to continue
                 DialogResult dialogResult = MessageBox.Show("This will delete the current list of teams and replace it with the current NHL teams. Are you sure you want to continue?", "Warning", MessageBoxButtons.YesNo);
@@ -67,9 +69,9 @@ namespace HockeyPoolStatsv2
             }
 
             // if Teams.json exists I need to delete it
-            if (System.IO.File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
+            if (File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
             {
-                System.IO.File.Delete(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
+                File.Delete(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
             }
 
             ApiCall apiCall = new ApiCall();
@@ -89,7 +91,7 @@ namespace HockeyPoolStatsv2
             }
             // now we have the list of teams to work with. I need to save it as json
             string json = JsonConvert.SerializeObject(MyTeams);
-            System.IO.File.WriteAllText(String.Format(@"{0}\Data\Teams.json", Application.StartupPath), json);
+            File.WriteAllText(String.Format(@"{0}\Data\Teams.json", Application.StartupPath), json);
 
 
             lbl_status.Text = "Team generation complete. You will need to select playoff teams.";
@@ -111,19 +113,19 @@ namespace HockeyPoolStatsv2
             lbl_status.Text = "Generating Players...Please wait.";
 
             // if Teams.json exists I need to delete it
-            if (System.IO.File.Exists(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath)))
+            if (File.Exists(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath)))
             {
-                System.IO.File.Delete(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
+                File.Delete(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
             }
 
             // Read the JSON file
-            if (!System.IO.File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
+            if (!File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
             {
                 MessageBox.Show("Teams have not been generated. Generate teams before trying to select playoff teams.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 lbl_status.Text = "Player generation complete with errors.";
                 return;
             }
-            string json = System.IO.File.ReadAllText(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
+            string json = File.ReadAllText(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
 
             // Deserialize the JSON into a list of Teams objects
             List<Teams> teamsList = JsonConvert.DeserializeObject<List<Teams>>(json);
@@ -198,7 +200,7 @@ namespace HockeyPoolStatsv2
             // Serialize the list of TeamRosters objects to JSON
             string jsonTeamRosters = JsonConvert.SerializeObject(teamRosters);
             // save the file
-            System.IO.File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), jsonTeamRosters);
+            File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), jsonTeamRosters);
 
             lbl_status.Text = "Player generation complete.";
             LoadStatus();
@@ -213,15 +215,26 @@ namespace HockeyPoolStatsv2
 
             // read TeamRosters.json
             // Read the JSON file
-            if (!System.IO.File.Exists(String.Format(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath))))
+            if (!File.Exists(String.Format(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath))))
             {
                 MessageBox.Show("Teams have not been generated. Generate teams before trying to select playoff teams.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 lbl_status.Text = "Gathering player stats complete with errors.";
                 return;
             }
-            string json = System.IO.File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
+            string json = File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
             // make a list of teamrosters
             List<TeamRosters> teamRosters = JsonConvert.DeserializeObject<List<TeamRosters>>(json);
+
+            if (!File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
+            {
+                MessageBox.Show("Teams have not been generated. Generate teams before trying to select playoff teams.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                return;
+            }
+            string teamsJson = File.ReadAllText(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
+            List<Teams> teams = JsonConvert.DeserializeObject<List<Teams>>(teamsJson);
+
+
             int count = 0;
             Stopwatch watch = new Stopwatch();
             foreach (var item in teamRosters)
@@ -230,9 +243,13 @@ namespace HockeyPoolStatsv2
                 count++;
                 lbl_status.Text = "Progress: " + count.ToString() + "/" + teamRosters.Count.ToString() + " (" + item.FullName + ") ";
 
+                var isTeamEliminated = teams.Where(x => x.TeamAbbrev == item.TeamAbbrev).Select(x => x.Elimintaed).FirstOrDefault();
+
 
                 // Player has been disabled. Skipping them.
-                if (!item.Enabled) { continue;  }
+                if (!item.Enabled) { continue; }
+                // Team is eliminated. Skipping all players on that team.
+                if (isTeamEliminated) { continue; }
 
 
                 // I need to hit the player API to get the points for that player for this playoff season...
@@ -302,22 +319,75 @@ namespace HockeyPoolStatsv2
             // Serialize the list of TeamRosters objects to JSON
             string jsonTeamRosters = JsonConvert.SerializeObject(teamRosters);
             // save the file
-            System.IO.File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), jsonTeamRosters);
+            File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), jsonTeamRosters);
+            var existingPlayers = new List<TeamRosters>();
 
-            // Save the list of TeamRosters objects to a CSV file
+            if (File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
+            {
+                var lines = File.ReadAllLines(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)).ToList();
+
+                existingPlayers = lines
+                   .Skip(1) // Skip header
+                   .Select(line =>
+                   {
+                       var parts = line.Split(',');
+
+                       return new TeamRosters
+                       {
+                           TeamAbbrev = parts[0],
+                           PlayerID = int.Parse(parts[1]),
+                           TeamName = parts[2],
+                           FullName = parts[3],
+                           Goals = int.Parse(parts[4]),
+                           Assists = int.Parse(parts[5]),
+                           Points = int.Parse(parts[6]),
+                           Shutouts = int.Parse(parts[7]),
+                           Wins = int.Parse(parts[8]),
+                           Position = parts[9]
+                       };
+                   })
+                   .ToList();
+
+                var playerLookup = existingPlayers.ToDictionary(p => p.PlayerID);
+
+                foreach (var apiPlayer in teamRosters)
+                {
+
+                    if (playerLookup.TryGetValue(apiPlayer.PlayerID, out var existing))
+                    {
+                        if (existing.Position == "Goalie")
+                        {
+                            existing.Wins = apiPlayer.Wins;
+                            existing.Shutouts = apiPlayer.Shutouts;
+                        }
+                        else
+                        {
+                            existing.Goals = apiPlayer.Goals;
+                            existing.Assists = apiPlayer.Assists;
+                            existing.Points = apiPlayer.Points;
+                        }
+                    }
+                }
+            }
+
             StringBuilder csv = new StringBuilder();
             csv.AppendLine("TeamAbbrev,PlayerID,TeamName,FullName,Goals,Assists,Points,Shutouts,Wins,Position");
-            foreach (var item in teamRosters)
+            foreach (var item in existingPlayers)
             {
                 csv.AppendLine(item.TeamAbbrev + "," + item.PlayerID + "," + item.TeamName + "," + item.FullName + "," + item.Goals + "," + item.Assists + "," + item.Points + "," + item.Shutouts + "," + item.Wins + "," + item.Position);
             }
 
+
+
+
+
+
             // save the file
-            if (System.IO.File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
+            if (File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
             {
-                System.IO.File.Delete(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath));
+                File.Delete(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath));
             }
-            System.IO.File.WriteAllText(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath), csv.ToString());
+            File.WriteAllText(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath), csv.ToString());
 
             watch.Stop();
             double minutes = TimeSpan.FromMilliseconds(watch.ElapsedMilliseconds).TotalMinutes;
@@ -393,11 +463,11 @@ namespace HockeyPoolStatsv2
             }
 
 
-            if (System.IO.File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
+            if (File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
             {
 
                 // Read the file and convert it to list of Teams
-                string json = System.IO.File.ReadAllText(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
+                string json = File.ReadAllText(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
                 List<Teams> teams = JsonConvert.DeserializeObject<List<Teams>>(json);
                 if (teams.Count > 0)
                 {
@@ -418,9 +488,9 @@ namespace HockeyPoolStatsv2
                 lbl_TeamsGeneratedStatus.ForeColor = Color.Red;
             }
 
-            if (System.IO.File.Exists(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath)))
+            if (File.Exists(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath)))
             {
-                string json = System.IO.File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
+                string json = File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
                 List<TeamRosters> teamRosters = JsonConvert.DeserializeObject<List<TeamRosters>>(json);
                 if (teamRosters.Count > 0)
                 {
@@ -461,17 +531,17 @@ namespace HockeyPoolStatsv2
             DialogResult dialogResult = MessageBox.Show("This will delete ALL data. Are you sure you want to continue?", "Warning", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                if (System.IO.File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
+                if (File.Exists(String.Format(@"{0}\Data\Teams.json", Application.StartupPath)))
                 {
-                    System.IO.File.Delete(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
+                    File.Delete(String.Format(@"{0}\Data\Teams.json", Application.StartupPath));
                 }
-                if (System.IO.File.Exists(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath)))
+                if (File.Exists(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath)))
                 {
-                    System.IO.File.Delete(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
+                    File.Delete(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
                 }
-                if (System.IO.File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
+                if (File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
                 {
-                    System.IO.File.Delete(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath));
+                    File.Delete(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath));
                 }
 
             }
@@ -489,7 +559,7 @@ namespace HockeyPoolStatsv2
         private async void button6_Click(object sender, EventArgs e)
         {
 
-            string json = System.IO.File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
+            string json = File.ReadAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath));
             // make a list of teamrosters
 
             List<TeamRosters> teamRosters = JsonConvert.DeserializeObject<List<TeamRosters>>(json);
@@ -562,7 +632,7 @@ namespace HockeyPoolStatsv2
             // Serialize the list of TeamRosters objects to JSON
             string jsonTeamRosters = JsonConvert.SerializeObject(teamRosters);
             // save the file
-            System.IO.File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), jsonTeamRosters);
+            File.WriteAllText(String.Format(@"{0}\Data\TeamRosters.json", Application.StartupPath), jsonTeamRosters);
 
             // Save the list of TeamRosters objects to a CSV file
             StringBuilder csv = new StringBuilder();
@@ -573,11 +643,11 @@ namespace HockeyPoolStatsv2
             }
 
             // save the file
-            if (System.IO.File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
+            if (File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
             {
-                System.IO.File.Delete(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath));
+                File.Delete(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath));
             }
-            System.IO.File.WriteAllText(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath), csv.ToString());
+            File.WriteAllText(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath), csv.ToString());
 
             lbl_status.Text = "Gathering player stats complete.";
             LoadStatus();
@@ -592,6 +662,49 @@ namespace HockeyPoolStatsv2
         {
             DisablePlayersForm dplayers = new DisablePlayersForm();
             dplayers.ShowDialog();
+        }
+
+        private void CompareCSV()
+        {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+
+
+            if (File.Exists(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)))
+            {
+                var lines = File.ReadAllLines(String.Format(@"{0}\Stats\PlayerStats.csv", Application.StartupPath)).ToList();
+
+                var players = lines
+                    .Skip(1) // Skip header
+                    .Select(line =>
+                    {
+                        var parts = line.Split(',');
+
+                        return new Player
+                        {
+                            TeamAbbrev = parts[0],
+                            PlayerID = int.Parse(parts[1]),
+                            TeamName = parts[2],
+                            FullName = parts[3],
+                            Goals = int.Parse(parts[4]),
+                            Assists = int.Parse(parts[5]),
+                            Points = int.Parse(parts[6]),
+                            Shutouts = int.Parse(parts[7]),
+                            Wins = int.Parse(parts[8]),
+                            Positions = parts[9]
+                        };
+                    })
+                    .ToList();
+            }
+
+
+
+
+
+
         }
     }
 }

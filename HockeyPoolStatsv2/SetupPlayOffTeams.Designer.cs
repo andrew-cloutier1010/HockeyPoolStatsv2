@@ -34,6 +34,7 @@
             this.IsPlayoffTeam = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.Eliminated = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,12 +45,14 @@
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TeamName,
             this.TeamAbbrev,
-            this.IsPlayoffTeam});
-            this.dataGridView2.Location = new System.Drawing.Point(12, 12);
+            this.IsPlayoffTeam,
+            this.Eliminated});
+            this.dataGridView2.Location = new System.Drawing.Point(8, 8);
+            this.dataGridView2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowHeadersWidth = 62;
             this.dataGridView2.RowTemplate.Height = 28;
-            this.dataGridView2.Size = new System.Drawing.Size(1012, 780);
+            this.dataGridView2.Size = new System.Drawing.Size(675, 507);
             this.dataGridView2.TabIndex = 1;
             // 
             // TeamName
@@ -77,9 +80,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 809);
+            this.button1.Location = new System.Drawing.Point(8, 526);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(86, 41);
+            this.button1.Size = new System.Drawing.Size(57, 27);
             this.button1.TabIndex = 2;
             this.button1.Text = "Save";
             this.button1.UseVisualStyleBackColor = true;
@@ -87,23 +91,30 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(104, 809);
+            this.button2.Location = new System.Drawing.Point(69, 526);
+            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(92, 41);
+            this.button2.Size = new System.Drawing.Size(61, 27);
             this.button2.TabIndex = 3;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // Eliminated
+            // 
+            this.Eliminated.HeaderText = "Eliminated";
+            this.Eliminated.Name = "Eliminated";
+            // 
             // SetupPlayOffTeams
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1036, 862);
+            this.ClientSize = new System.Drawing.Size(694, 560);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "SetupPlayOffTeams";
             this.Text = "SetupPlayOffTeams";
             this.Load += new System.EventHandler(this.SetupPlayOffTeams_Load);
@@ -120,5 +131,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn IsPlayoffTeam;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Eliminated;
     }
 }
