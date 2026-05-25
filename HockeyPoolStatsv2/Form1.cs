@@ -243,7 +243,7 @@ namespace HockeyPoolStatsv2
                 count++;
                 lbl_status.Text = "Progress: " + count.ToString() + "/" + teamRosters.Count.ToString() + " (" + item.FullName + ") ";
 
-                var isTeamEliminated = teams.Where(x => x.TeamAbbrev == item.TeamAbbrev).Select(x => x.Elimintaed).FirstOrDefault();
+                var isTeamEliminated = teams.Where(x => x.TeamAbbrev == item.TeamAbbrev).Select(x => x.Eliminated).FirstOrDefault();
 
 
                 // Player has been disabled. Skipping them.

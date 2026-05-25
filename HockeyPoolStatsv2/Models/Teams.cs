@@ -13,7 +13,7 @@ namespace HockeyPoolStatsv2
         public string TeamName { get; set; }
         public string TeamAbbrev { get; set; }
         public bool IsPlayoffTeam { get; set; }
-        public bool Elimintaed { get; set; }
+        public bool Eliminated { get; set; }
 
     }
 }
