@@ -28,11 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DisablePlayersForm));
             this.playersGrid = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txt_PlayerName = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txt_teams = new System.Windows.Forms.TextBox();
             this.TeamAbbrev = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PlayerID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TeamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -44,6 +41,12 @@
             this.Wins = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Position = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gridEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txt_PlayerName = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txt_teams = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.playersGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,53 +66,12 @@
             this.Wins,
             this.Position,
             this.gridEnabled});
-            this.playersGrid.Location = new System.Drawing.Point(13, 86);
-            this.playersGrid.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.playersGrid.Location = new System.Drawing.Point(9, 56);
             this.playersGrid.Name = "playersGrid";
             this.playersGrid.RowHeadersWidth = 62;
-            this.playersGrid.Size = new System.Drawing.Size(1353, 825);
+            this.playersGrid.Size = new System.Drawing.Size(902, 536);
             this.playersGrid.TabIndex = 0;
             this.playersGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.playersGrid_CellContentClick);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(18, 14);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Player Name:";
-            // 
-            // txt_PlayerName
-            // 
-            this.txt_PlayerName.Location = new System.Drawing.Point(132, 9);
-            this.txt_PlayerName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txt_PlayerName.Name = "txt_PlayerName";
-            this.txt_PlayerName.Size = new System.Drawing.Size(270, 26);
-            this.txt_PlayerName.TabIndex = 2;
-            this.txt_PlayerName.TextChanged += new System.EventHandler(this.txt_PlayerName_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(18, 51);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 30);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Team:";
-            // 
-            // txt_teams
-            // 
-            this.txt_teams.Location = new System.Drawing.Point(132, 48);
-            this.txt_teams.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txt_teams.Name = "txt_teams";
-            this.txt_teams.Size = new System.Drawing.Size(270, 26);
-            this.txt_teams.TabIndex = 4;
-            this.txt_teams.TextChanged += new System.EventHandler(this.txt_teams_TextChanged);
             // 
             // TeamAbbrev
             // 
@@ -205,17 +167,75 @@
             this.gridEnabled.MinimumWidth = 8;
             this.gridEnabled.Name = "gridEnabled";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Player Name:";
+            // 
+            // txt_PlayerName
+            // 
+            this.txt_PlayerName.Location = new System.Drawing.Point(88, 6);
+            this.txt_PlayerName.Name = "txt_PlayerName";
+            this.txt_PlayerName.Size = new System.Drawing.Size(181, 20);
+            this.txt_PlayerName.TabIndex = 2;
+            this.txt_PlayerName.TextChanged += new System.EventHandler(this.txt_PlayerName_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(12, 33);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(37, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Team:";
+            // 
+            // txt_teams
+            // 
+            this.txt_teams.Location = new System.Drawing.Point(88, 31);
+            this.txt_teams.Name = "txt_teams";
+            this.txt_teams.Size = new System.Drawing.Size(181, 20);
+            this.txt_teams.TabIndex = 4;
+            this.txt_teams.TextChanged += new System.EventHandler(this.txt_teams_TextChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(275, 29);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Enable All";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(356, 29);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Disable All";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // DisablePlayersForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1384, 995);
+            this.ClientSize = new System.Drawing.Size(923, 647);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.txt_teams);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txt_PlayerName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.playersGrid);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DisablePlayersForm";
             this.Text = "DisablePlayersForm";
             this.Load += new System.EventHandler(this.DisablePlayersForm_Load);
@@ -243,5 +263,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Wins;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position;
         private System.Windows.Forms.DataGridViewCheckBoxColumn gridEnabled;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }

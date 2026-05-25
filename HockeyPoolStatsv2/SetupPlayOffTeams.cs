@@ -47,6 +47,7 @@ namespace HockeyPoolStatsv2
                 team.TeamName = row.Cells["TeamName"].Value.ToString();
                 team.TeamAbbrev = row.Cells["TeamAbbrev"].Value.ToString();
                 team.IsPlayoffTeam = Convert.ToBoolean(row.Cells["IsPlayoffTeam"].Value);
+                team.Elimintaed = Convert.ToBoolean(row.Cells["Elimintaed"].Value);
                 // Set other properties of the 'team' object as needed
                 newTeamsList.Add(team);
             }

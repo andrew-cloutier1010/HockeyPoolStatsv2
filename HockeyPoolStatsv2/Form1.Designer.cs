@@ -42,15 +42,16 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openStatsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.disablePlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
             this.lbl_PlayersGeneratedStatus = new System.Windows.Forms.Label();
             this.lbl_TeamsGeneratedStatus = new System.Windows.Forms.Label();
             this.lbl_PlayoffYear = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
-            this.disablePlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button7 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -61,7 +62,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(11, 16);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(50, 49);
             this.button1.TabIndex = 0;
@@ -72,7 +73,7 @@
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(4, 16);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(65, 49);
             this.button2.TabIndex = 1;
@@ -83,7 +84,7 @@
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(65, 16);
-            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(50, 49);
             this.button3.TabIndex = 2;
@@ -95,9 +96,9 @@
             // 
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Location = new System.Drawing.Point(8, 38);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(77, 88);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
@@ -109,9 +110,9 @@
             this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Location = new System.Drawing.Point(89, 36);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox2.Size = new System.Drawing.Size(192, 90);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
@@ -120,7 +121,7 @@
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(119, 16);
-            this.button4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(62, 49);
             this.button4.TabIndex = 3;
@@ -132,9 +133,9 @@
             // 
             this.groupBox3.Controls.Add(this.button5);
             this.groupBox3.Location = new System.Drawing.Point(285, 36);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox3.Size = new System.Drawing.Size(74, 90);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
@@ -143,7 +144,7 @@
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(4, 16);
-            this.button5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button5.Margin = new System.Windows.Forms.Padding(2);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(62, 49);
             this.button5.TabIndex = 6;
@@ -197,8 +198,16 @@
             this.openStatsFolderToolStripMenuItem.Text = "Open Stats Folder";
             this.openStatsFolderToolStripMenuItem.Click += new System.EventHandler(this.openStatsFolderToolStripMenuItem_Click);
             // 
+            // disablePlayersToolStripMenuItem
+            // 
+            this.disablePlayersToolStripMenuItem.Name = "disablePlayersToolStripMenuItem";
+            this.disablePlayersToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.disablePlayersToolStripMenuItem.Text = "Disable Players";
+            this.disablePlayersToolStripMenuItem.Click += new System.EventHandler(this.disablePlayersToolStripMenuItem_Click);
+            // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.button7);
             this.groupBox4.Controls.Add(this.button6);
             this.groupBox4.Controls.Add(this.lbl_PlayersGeneratedStatus);
             this.groupBox4.Controls.Add(this.lbl_TeamsGeneratedStatus);
@@ -207,13 +216,25 @@
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Location = new System.Drawing.Point(363, 36);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox4.Size = new System.Drawing.Size(552, 90);
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Status";
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(474, 19);
+            this.button6.Margin = new System.Windows.Forms.Padding(2);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(50, 49);
+            this.button6.TabIndex = 6;
+            this.button6.Text = "Select Playoff Teams";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Visible = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // lbl_PlayersGeneratedStatus
             // 
@@ -275,24 +296,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Playoff Year:";
             // 
-            // button6
+            // button7
             // 
-            this.button6.Location = new System.Drawing.Point(474, 19);
-            this.button6.Margin = new System.Windows.Forms.Padding(2);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(50, 49);
-            this.button6.TabIndex = 6;
-            this.button6.Text = "Select Playoff Teams";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Visible = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // disablePlayersToolStripMenuItem
-            // 
-            this.disablePlayersToolStripMenuItem.Name = "disablePlayersToolStripMenuItem";
-            this.disablePlayersToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
-            this.disablePlayersToolStripMenuItem.Text = "Disable Players";
-            this.disablePlayersToolStripMenuItem.Click += new System.EventHandler(this.disablePlayersToolStripMenuItem_Click);
+            this.button7.Location = new System.Drawing.Point(394, 42);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 7;
+            this.button7.Text = "button7";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Visible = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
@@ -308,7 +321,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Hockey Pool Stats v2";
@@ -349,6 +362,7 @@
         private System.Windows.Forms.ToolStripMenuItem openStatsFolderToolStripMenuItem;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.ToolStripMenuItem disablePlayersToolStripMenuItem;
+        private System.Windows.Forms.Button button7;
     }
 }
 
