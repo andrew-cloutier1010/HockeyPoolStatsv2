@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using static HockeyPoolStatsv2.apiTeams;
 using System.Windows.Forms;
 using System.Net;
+using System.Threading;
 
 namespace HockeyPoolStatsv2.Helpers
 {
@@ -41,15 +42,29 @@ namespace HockeyPoolStatsv2.Helpers
                 {
 
                     string url = ApiUri + endpoint;
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    bool TryAgain = true;
 
-                    if (response.IsSuccessStatusCode)
+                    while (TryAgain)
                     {
-                        responseBody = await response.Content.ReadAsStringAsync();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Failed to retrieve data from the API.");
+                        HttpResponseMessage response = await client.GetAsync(url);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            responseBody = await response.Content.ReadAsStringAsync();
+                            TryAgain = false;
+                        }
+                        else if (response.ReasonPhrase.Contains("Too Many Requests"))
+                        {
+                            var retryAfter = response.Headers.RetryAfter?.Delta
+                                ?? TimeSpan.FromSeconds(5);
+                            await Task.Delay(retryAfter);
+                            // Thread.Sleep(10000);
+                             TryAgain = true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to retrieve data from the API.");
+                        }
                     }
 
                     return responseBody;

@@ -228,7 +228,7 @@ namespace HockeyPoolStatsv2
             {
                 watch.Start();
                 count++;
-                lbl_status.Text = "Progress: " + count.ToString() + "/" + teamRosters.Count.ToString();
+                lbl_status.Text = "Progress: " + count.ToString() + "/" + teamRosters.Count.ToString() + " (" + item.FullName + ") ";
 
 
                 // Player has been disabled. Skipping them.
