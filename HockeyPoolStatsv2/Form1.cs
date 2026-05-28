@@ -372,10 +372,21 @@ namespace HockeyPoolStatsv2
 
             StringBuilder csv = new StringBuilder();
             csv.AppendLine("TeamAbbrev,PlayerID,TeamName,FullName,Goals,Assists,Points,Shutouts,Wins,Position");
-            foreach (var item in existingPlayers)
+            if (existingPlayers.Count > 0)
             {
-                csv.AppendLine(item.TeamAbbrev + "," + item.PlayerID + "," + item.TeamName + "," + item.FullName + "," + item.Goals + "," + item.Assists + "," + item.Points + "," + item.Shutouts + "," + item.Wins + "," + item.Position);
+                foreach (var item in existingPlayers)
+                {
+                    csv.AppendLine(item.TeamAbbrev + "," + item.PlayerID + "," + item.TeamName + "," + item.FullName + "," + item.Goals + "," + item.Assists + "," + item.Points + "," + item.Shutouts + "," + item.Wins + "," + item.Position);
+                }
             }
+            else
+            {
+                foreach (var item in teamRosters)
+                {
+                    csv.AppendLine(item.TeamAbbrev + "," + item.PlayerID + "," + item.TeamName + "," + item.FullName + "," + item.Goals + "," + item.Assists + "," + item.Points + "," + item.Shutouts + "," + item.Wins + "," + item.Position);
+                }
+            }
+
 
 
 
